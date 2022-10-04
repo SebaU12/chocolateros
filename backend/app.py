@@ -1,0 +1,29 @@
+from flask import Flask, jsonify
+import database as dbase
+from os import environ 
+from dotenv import load_dotenv, find_dotenv
+from routes.account_routes import account_blueprint 
+from database import db_sql, ma 
+from routes.record_ventas_router import record_blueprint
+from routes.record_all_router import record_all_blueprint 
+
+load_dotenv(find_dotenv())
+db = dbase.dbConnection_mongo()
+
+app = Flask(__name__)
+app.register_blueprint(account_blueprint, url_prefix='/account')
+app.register_blueprint(record_blueprint, url_prefix='/record')
+app.register_blueprint(record_all_blueprint, url_prefix='/record_all')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get("SQL_URI_DB1")
+app.config['SQLALCHEMY_BINDS'] = {'two': environ.get("SQL_URI_DB2")}
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  
+db_sql.init_app(app)
+ma.init_app(app)
+
+@app.route('/', methods=['GET'])
+def ping():
+    return jsonify({"response": "API FUNCIONANDO"})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=environ.get("PORT_TEST"), debug=True)

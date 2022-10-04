@@ -1,0 +1,52 @@
+version: "3"
+
+services:
+  api:
+    build: "./backend"
+    ports:
+      - "5000:5000"
+    links:
+      - db_mongo
+      - db_psql
+      - db_psql2
+  db_mongo: 
+    build: "./db"
+    ports: 
+      - "27017:27017"
+    volumes:
+      - ./no_sql:/data/db
+      - ./no_sql/log:/var/log/mongodb/
+  db_psql:
+    image: postgres:14.5
+    restart: always
+    volumes: 
+     - ./sql/backup:/var/lib/postgresql/data/
+    ports: 
+      - "5432:5432"
+    environment:
+     - DATABASE_HOST=127.0.0.1
+     - POSTGRES_USER=chocolateros
+     - POSTGRES_PASSWORD=jalados
+     - POSTGRES_DB=ventasDB
+  db_psql2:
+    image: postgres:14.5
+    restart: always
+    volumes: 
+     - ./sql/backup2:/var/lib/postgresql/data/
+    ports: 
+      - "5431:5431"
+    environment:
+     - DATABASE_HOST=127.0.0.1
+     - POSTGRES_USER=chocolateros
+     - POSTGRES_PASSWORD=jalados
+     - POSTGRES_DB=recordsDB
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "hola@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "123"
+    ports: 
+      - "80:80"
+    depends_on:
+      - db_psql
+      - db_psql2
