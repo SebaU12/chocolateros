@@ -7,6 +7,7 @@ from database import db_sql, ma
 from routes.record_ventas_routes import record_blueprint
 from routes.record_all_routes import record_all_blueprint 
 from routes.purchase_request_routes import purchase_request_blueprint 
+from routes.inventory_request_routes import inventory_request_blueprint 
 
 load_dotenv(find_dotenv())
 db = dbase.dbConnection_mongo()
@@ -17,9 +18,12 @@ app.register_blueprint(record_blueprint, url_prefix='/record')
 app.register_blueprint(record_all_blueprint, url_prefix='/record_all')
 app.register_blueprint(purchase_request_blueprint, 
                        url_prefix='/purchase_request')
+app.register_blueprint(inventory_request_blueprint, 
+                       url_prefix='/inventory_request')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get("SQL_URI_DB1")
-app.config['SQLALCHEMY_BINDS'] = {'two': environ.get("SQL_URI_DB2")}
+app.config['SQLALCHEMY_BINDS'] = {'two': environ.get("SQL_URI_DB2"), 
+                                  'three': environ.get("SQL_URI_DB3")}
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  
 db_sql.init_app(app)
 ma.init_app(app)

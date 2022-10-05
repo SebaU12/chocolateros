@@ -1,5 +1,5 @@
 import database as db_config
-from services.purchase_request_service import send_request, get_requests, update_state 
+from services.inventory_request_service import send_request, get_requests, update_state 
 
 db=db_config.db_sql
 

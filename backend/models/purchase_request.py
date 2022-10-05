@@ -10,14 +10,13 @@ class PRequest(db.Model):
     supplier = db.Column(db.String(250), nullable=False)
     request_date = db.Column(db.Date, nullable = False)
     motive = db.Column(db.String(250), nullable = False)
-    state = db.Column(db.Boolean, nullable = False)
+    state = db.Column(db.Boolean, nullable = False, default=False)
 
-    def __init__(self, amount, supplier, request_date, motive, state):
+    def __init__(self, amount, supplier, request_date, motive):
         self.amount = amount 
         self.supplier = supplier 
         self.request_date = request_date 
         self.motive = motive 
-        self.state = state 
 
 class PRequestSchema(ma.Schema):
     class Meta: 

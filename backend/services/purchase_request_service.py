@@ -9,9 +9,8 @@ def send_request():
     supplier = request.json['supplier']
     request_date = request.json['request_date']
     motive = request.json['motive']
-    state = request.json['state']
     purchase_request = PRequest(amount, supplier, 
-            request_date, motive, state)
+            request_date, motive)
     db.session.add(purchase_request)
     db.session.commit()
     return prequest_schema.jsonify(purchase_request) 
@@ -20,3 +19,10 @@ def get_requests():
     all_request = PRequest.query.all()
     result = prequests_schema.dump(all_request)
     return jsonify(result)
+
+def update_state(id):
+    prequest = PRequest.query.get(id)
+    prequest.state = True
+    db.session.commit()
+    return prequest_schema.jsonify(prequest)
+
