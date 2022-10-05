@@ -4,49 +4,63 @@ services:
   api:
     build: "./backend"
     ports:
-      - "5000:5000"
+      - "${PORT_API}"
     links:
       - db_mongo
       - db_psql
       - db_psql2
+      - db_psql3
   db_mongo: 
     build: "./db"
     ports: 
-      - "27017:27017"
+      - "${PORT_MONGO}" 
     volumes:
-      - ./no_sql:/data/db
-      - ./no_sql/log:/var/log/mongodb/
+      - "${DIR_NO_SQL}" 
+      - "${DIR_NO_SQL_LOG}"
   db_psql:
     image: postgres:14.5
     restart: always
     volumes: 
-     - ./sql/backup:/var/lib/postgresql/data/
+     - "${DIR_SQL}"
     ports: 
-      - "5432:5432"
+     - "${PORT_PSQL}"
     environment:
-     - DATABASE_HOST=127.0.0.1
-     - POSTGRES_USER=chocolateros
-     - POSTGRES_PASSWORD=jalados
+     - DATABASE_HOST="${HOST_DB}"
+     - POSTGRES_USER="${USER_PSQL}"
+     - POSTGRES_PASSWORD="${PASSWORD_PSQL}"
      - POSTGRES_DB=ventasDB
   db_psql2:
     image: postgres:14.5
     restart: always
     volumes: 
-     - ./sql/backup2:/var/lib/postgresql/data/
+     - "${DIR_SQL2}"
     ports: 
-      - "5431:5431"
+      - "${PORT_PSQL2}"
     environment:
-     - DATABASE_HOST=127.0.0.1
-     - POSTGRES_USER=chocolateros
-     - POSTGRES_PASSWORD=jalados
-     - POSTGRES_DB=recordsDB
+     - DATABASE_HOST="${HOST_DB}"
+     - POSTGRES_USER="${USER_PSQL}"
+     - POSTGRES_PASSWORD="${PASSWORD_PSQL}"
+     - POSTGRES_DB=registrosDB
+  db_psql3:
+    image: postgres:14.5
+    restart: always
+    volumes: 
+     - "${DIR_SQL3}"
+    ports: 
+      - "${PORT_PSQL3}"
+    environment:
+     - DATABASE_HOST="${HOST_DB}"
+     - POSTGRES_USER="${USER_PSQL}"
+     - POSTGRES_PASSWORD="${PASSWORD_PSQL}"
+     - POSTGRES_DB=contabilidadDB
   pgadmin:
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: "hola@gmail.com"
       PGADMIN_DEFAULT_PASSWORD: "123"
     ports: 
-      - "80:80"
+      - "${PORT_PGADMIN}" 
     depends_on:
       - db_psql
       - db_psql2
+      - db_psql3
