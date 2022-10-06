@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from controllers.record_ventasController import post_record, list_records 
+from controllers.record_ventasController import post_record, list_records, get_records_month 
 from middleware.check_auth import checkAuth
 
 record_blueprint = Blueprint('blueprint_ventas', __name__)
@@ -13,3 +13,5 @@ def verify_token_middleware():
 
 record_blueprint.route('/post_ventas', methods=['POST'])(post_record)
 record_middleware_blueprint.route('/get_all', methods=['GET'])(list_records)
+record_middleware_blueprint.route('/get_month/<year>/<month>', 
+        methods=['GET'])(get_records_month)
