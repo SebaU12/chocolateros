@@ -1,5 +1,6 @@
-from flask import Blueprint
+from flask import Blueprint 
 from controllers.accountController import account_login
+
 
 account_blueprint = Blueprint('blueprint', __name__)
 

@@ -1,6 +1,7 @@
 from flask import jsonify, request
 import database as db_config
 from models.purchase_request import PRequest, prequest_schema, prequests_schema
+from middleware.check_auth import getEmail  
 
 db = db_config.db_sql
 
@@ -22,7 +23,9 @@ def get_requests():
 
 def update_state(id):
     prequest = PRequest.query.get(id)
+    email = getEmail(token = request.headers['Authorization'].split(" ")[1])
     prequest.state = True
+    prequest.email_check = email
     db.session.commit()
     return prequest_schema.jsonify(prequest)
 

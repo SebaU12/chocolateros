@@ -11,6 +11,7 @@ class PRequest(db.Model):
     request_date = db.Column(db.Date, nullable = False)
     motive = db.Column(db.String(250), nullable = False)
     state = db.Column(db.Boolean, nullable = False, default=False)
+    email_check= db.Column(db.String(250), nullable = True)
 
     def __init__(self, amount, supplier, request_date, motive):
         self.amount = amount 
